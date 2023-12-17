@@ -1,6 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const shortUUID = require('short-uuid');
+const shortid = require('shortid');
 
 const app = express();
 const port = 3000;
@@ -31,13 +31,11 @@ async function connectToMongoDB() {
 
 connectToMongoDB();
 
-const uuid = shortUUID();
-
 app.use(express.json());
 
 app.post('/shorten', async (req, res) => {
   const originalUrl = req.body.url;
-  const guid = uuid.new(); // Generate a short ID using short-uuid
+  const guid = shortid.generate(); // Generate a short ID using shortid
 
   const urlMapping = { guid, originalUrl };
 
@@ -51,6 +49,7 @@ app.post('/shorten', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
     //---------------------------------------------------------------------------------
 app.get('/:guid', async (req, res) => {
